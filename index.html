@@ -221,7 +221,8 @@ class Fighter{
     if(this.ft>=this.adef.s){this.ft-=this.adef.s;
       const n=this.adef.f.length;
       this.fi=this.adef.loop?(this.fi+1)%n:Math.min(this.fi+1,n-1);
-      if(!this.adef.loop&&this.fi>=n-1&&this.attacking()&&this.state!=='ko'&&this.ground)this.set('idle');
+      // end of any non-looping action (attacks, hadou, etc.) -> back to idle
+      if(!this.adef.loop&&this.fi>=n-1&&this.busy()&&this.state!=='ko'&&this.state!=='hurt'&&this.ground)this.set('idle');
     }
     this.sp.setTexture('ryu',this.adef.f[this.fi]);
     this.sp.setScale(this.face<0?-this.scale:this.scale,this.scale);
