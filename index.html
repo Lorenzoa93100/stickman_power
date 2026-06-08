@@ -11,69 +11,88 @@
   body { background:#000; display:flex; align-items:center; justify-content:center; height:100dvh; overflow:hidden; touch-action:none; }
   #game-container { position:relative; }
   #game-container canvas { display:block; touch-action:none; }
-
-  #gamepad {
-    display:none; position:fixed; bottom:0; left:0; right:0; height:160px;
-    pointer-events:none; z-index:100;
-  }
+  #gamepad { display:none; position:fixed; bottom:0; left:0; right:0; height:160px; pointer-events:none; z-index:100; }
   #gamepad.visible { display:flex; justify-content:space-between; align-items:flex-end; padding:0 12px 14px; }
-  .gp-btn {
-    pointer-events:all; user-select:none; -webkit-user-select:none;
-    border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:13px; color:#fff;
-    border:3px solid rgba(255,255,255,0.4);
-    box-shadow:0 4px 12px rgba(0,0,0,0.5);
-    transition:transform .08s,opacity .08s;
-  }
+  .gp-btn { pointer-events:all; user-select:none; -webkit-user-select:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; color:#fff; border:3px solid rgba(255,255,255,0.4); box-shadow:0 4px 12px rgba(0,0,0,0.5); transition:transform .08s,opacity .08s; }
   .gp-btn.pressed { transform:scale(.88); opacity:.7; }
   #dpad { position:relative; width:130px; height:130px; pointer-events:none; }
-  .dp {
-    pointer-events:all; position:absolute; user-select:none; -webkit-user-select:none;
-    display:flex; align-items:center; justify-content:center;
-    font-size:22px; color:rgba(255,255,255,.85);
-    background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.3); border-radius:10px;
-    transition:background .08s,transform .08s;
-  }
+  .dp { pointer-events:all; position:absolute; user-select:none; -webkit-user-select:none; display:flex; align-items:center; justify-content:center; font-size:22px; color:rgba(255,255,255,.85); background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.3); border-radius:10px; transition:background .08s,transform .08s; }
   .dp.pressed { background:rgba(255,255,255,.35); transform:scale(.9); }
-  #dL { left:0;   top:42px;  width:42px; height:46px; }
-  #dR { right:0;  top:42px;  width:42px; height:46px; }
-  #dU { left:44px; top:0;    width:42px; height:42px; }
-  #dD { left:44px; bottom:0; width:42px; height:42px; }
-  #dC { position:absolute; left:44px; top:42px; width:42px; height:46px; background:rgba(255,255,255,.04); border-radius:8px; pointer-events:none; }
-  #action-btns { display:flex; flex-direction:column; gap:10px; align-items:flex-end; }
-  .action-row { display:flex; gap:10px; }
-  #bPunch { width:60px; height:60px; background:rgba(220,50,50,.75); }
-  #bKick  { width:60px; height:60px; background:rgba(50,150,220,.75); }
-  #bBlock { width:56px; height:36px; border-radius:18px; background:rgba(150,100,220,.7); }
-  #bJump  { width:56px; height:36px; border-radius:18px; background:rgba(50,200,100,.7); }
+  #dL{left:0;top:42px;width:42px;height:46px;} #dR{right:0;top:42px;width:42px;height:46px;}
+  #dU{left:44px;top:0;width:42px;height:42px;} #dD{left:44px;bottom:0;width:42px;height:42px;}
+  #dC{position:absolute;left:44px;top:42px;width:42px;height:46px;background:rgba(255,255,255,.04);border-radius:8px;pointer-events:none;}
+  #action-btns{display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
+  .action-row{display:flex;gap:10px;}
+  #bPunch{width:60px;height:60px;background:rgba(220,50,50,.75);}
+  #bKick{width:60px;height:60px;background:rgba(50,150,220,.75);}
+  #bBlock{width:56px;height:36px;border-radius:18px;background:rgba(150,100,220,.7);}
+  #bJump{width:56px;height:36px;border-radius:18px;background:rgba(50,200,100,.7);}
 </style>
 </head>
 <body>
 <div id="game-container"></div>
-
 <div id="gamepad">
   <div id="dpad">
-    <div class="dp" id="dL">◀</div>
-    <div class="dp" id="dR">▶</div>
-    <div class="dp" id="dU">▲</div>
-    <div class="dp" id="dD">▼</div>
+    <div class="dp" id="dL">◀</div><div class="dp" id="dR">▶</div>
+    <div class="dp" id="dU">▲</div><div class="dp" id="dD">▼</div>
     <div id="dC"></div>
   </div>
   <div id="action-btns">
-    <div class="action-row">
-      <div class="gp-btn" id="bJump">SAUT</div>
-      <div class="gp-btn" id="bBlock">BLOC</div>
-    </div>
-    <div class="action-row">
-      <div class="gp-btn" id="bPunch">COUP</div>
-      <div class="gp-btn" id="bKick">KICK</div>
-    </div>
+    <div class="action-row"><div class="gp-btn" id="bJump">SAUT</div><div class="gp-btn" id="bBlock">BLOC</div></div>
+    <div class="action-row"><div class="gp-btn" id="bPunch">COUP</div><div class="gp-btn" id="bKick">KICK</div></div>
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
 <script>
 const W=960, H=540, FLOOR=H-80, GRAVITY=1900, JUMP_V=-720;
+
+// ─── SPRITE ATLAS MAP ─────────────────────────────────────────────────────────
+// Based on analyzed sprite sheet layout (ryu.png, 1549×12116, bg removed)
+// Format: { name, x, y, w, h } — each entry is one animation frame
+const RYU_FRAMES = (() => {
+  const frames = {};
+  const add = (name, x, y, w, h) => { frames[name] = {x,y,w,h}; };
+
+  // IDLE — y=1276, h=96, 5 frames w=80
+  [0,1,2,3,4].forEach(i => add(`idle${i}`, 1+i*81, 1276, 80, 96));
+
+  // WALK — y=1373, h=96, 6 frames w=80
+  [0,1,2,3,4,5].forEach(i => add(`walk${i}`, 1+i*81, 1373, 80, 96));
+
+  // JUMP — y=1583, h=112, 6 frames w=64
+  [0,1,2,3,4,5].forEach(i => add(`jump${i}`, 1+i*65, 1583, 64, 112));
+
+  // CROUCH — use idle frame 4 stretched + first walk as crouch approximation
+  // Actually use jump frames 3-4 as crouch
+  add('crouch0', 1+3*65, 1583, 64, 112);
+  add('crouch1', 1+4*65, 1583, 64, 112);
+
+  // PUNCH — y=1793, h=96, 2 frames w=112
+  add('punch0', 1,     1793, 112, 96);
+  add('punch1', 114,   1793, 112, 96);
+  add('punch2', 114,   1793, 112, 96); // hold extended
+
+  // KICK — y=1470, h=112, 6 frames w=128 (wide kick animation)
+  [0,1,2,3,4,5].forEach(i => add(`kick${i}`, 1+i*129, 1470, 128, 112));
+
+  // UPPERCUT (special/hurt reaction) — y=2197, h=128, 3 frames w=112
+  [0,1,2].forEach(i => add(`upper${i}`, 1+i*113, 2197, 112, 128));
+
+  // BLOCK — use walk frame 0 in a slightly different pose; we'll use idle0 for now
+  // y=1276, use last idle frame as block
+  add('block0', 1+4*81, 1276, 80, 96);
+
+  // HURT — use upper0/1 as hurt reaction
+  add('hurt0', 1,   2197, 112, 128);
+  add('hurt1', 114, 2197, 112, 128);
+
+  // KO — use upper2 + lay flat (use walk5 sideways as approximation)
+  add('ko0', 227, 2197, 112, 128);
+  add('ko1', 227, 2197, 112, 128);
+  add('ko2', 227, 2197, 112, 128);
+
+  return frames;
+})();
 
 // ─── TOUCH INPUT ──────────────────────────────────────────────────────────────
 const touch={left:false,right:false,up:false,down:false,block:false};
@@ -92,390 +111,45 @@ function initTouch(onPunch,onKick){
     el.addEventListener('touchstart',e=>{e.preventDefault();fn();el.classList.add('pressed');},{passive:false});
     el.addEventListener('touchend',  e=>{e.preventDefault();el.classList.remove('pressed');},{passive:false});
   }
-  hold('dL','left'); hold('dR','right'); hold('dU','up'); hold('dD','down'); hold('bBlock','block');
-  tap('bPunch',onPunch); tap('bKick',onKick);
+  hold('dL','left');hold('dR','right');hold('dU','up');hold('dD','down');hold('bBlock','block');
+  tap('bPunch',onPunch);tap('bKick',onKick);
   tap('bJump',()=>{touch.up=true;setTimeout(()=>touch.up=false,80);});
 }
 
-// ─── DRAW HELPERS (Phaser.Graphics) ──────────────────────────────────────────
-function limb(g,x1,y1,x2,y2,r1,r2,col){
-  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy)||1;
-  const nx=-dy/len,ny=dx/len;
-  g.fillStyle(col,1);
-  g.fillPoints([{x:x1+nx*r1,y:y1+ny*r1},{x:x2+nx*r2,y:y2+ny*r2},{x:x2-nx*r2,y:y2-ny*r2},{x:x1-nx*r1,y:y1-ny*r1}],true);
-  g.fillCircle(x1,y1,r1); g.fillCircle(x2,y2,r2);
-}
-function torso(g,bx,by,tx,ty,c1,c2){
-  g.fillStyle(c1,1);
-  g.fillPoints([{x:bx-22,y:by},{x:tx-15,y:ty},{x:tx+15,y:ty},{x:bx+22,y:by}],true);
-  g.fillStyle(c2,1);
-  g.fillPoints([{x:bx,y:by},{x:bx+22,y:by},{x:tx+15,y:ty},{x:tx,y:ty}],true);
-}
-function head(g,hx,hy,sk,hr){
-  g.fillStyle(sk,1); g.fillEllipse(hx,hy-10,28,32);
-  g.fillStyle(hr,1); g.fillEllipse(hx,hy-22,30,18); g.fillRect(hx-15,hy-28,30,12);
-  g.fillStyle(0xffffff,1); g.fillRect(hx-8,hy-16,6,5); g.fillRect(hx+2,hy-16,6,5);
-  g.fillStyle(0x111111,1); g.fillRect(hx-6,hy-15,3,4); g.fillRect(hx+4,hy-15,3,4);
-  g.fillStyle(sk,1); g.fillRect(hx-3,hy-8,6,4);
-}
+// ─── SCENE: PRELOAD ──────────────────────────────────────────────────────────
+class PreloadScene extends Phaser.Scene {
+  constructor(){ super('Preload'); }
+  preload(){
+    // Loading screen
+    const gbg=this.add.graphics();
+    gbg.fillGradientStyle(0x1a0005,0x1a0005,0x050014,0x050014,1);
+    gbg.fillRect(0,0,W,H);
+    this.add.text(W/2,H/2-30,'STICKMAN POWER',{fontSize:'54px',fontFamily:'Arial Black',color:'#ff4400',stroke:'#000',strokeThickness:8}).setOrigin(0.5);
+    const loadTxt=this.add.text(W/2,H/2+40,'Chargement...',{fontSize:'22px',color:'#ffcc00'}).setOrigin(0.5);
 
-function drawFighter(g, cx, floorY, state, frame, p, facing) {
-  // facing: 1 = right, -1 = left. Mirror all X offsets by multiplying by facing.
-  const f = facing === undefined ? 1 : facing;
-  const m = (offset) => cx + offset * f; // mirrored x from center
-  const by = floorY, t = frame;
-  let hx=cx, hy=by-92, bx=cx, bY=by;
-  let lkx,lky,rkx,rky,lax,lay,rax,ray;
-
-  g.fillStyle(0x000000,0.18); g.fillEllipse(cx,by-2,46,11);
-
-  switch(state){
-    case 'idle':{
-      const bob=[0,-1,-2,-1][t%4]||0; hy+=bob;
-      lkx=m(-9);lky=by-13;rkx=m(9);rky=by-13;
-      lax=m(-15);lay=by-55;rax=m(15);ray=by-55; break;
-    }
-    case 'walk':{
-      const a=Math.sin(t/6*Math.PI*2),b=Math.cos(t/6*Math.PI*2);
-      lkx=m(a*16);lky=by-13-Math.abs(a)*10;rkx=m(-a*16);rky=by-13-Math.abs(b)*10;
-      lax=m(-a*14);lay=by-58+a*5;rax=m(a*14);ray=by-58-a*5; break;
-    }
-    case 'jump':{
-      const ph=[[0,-5,-7,-18,7,-18,-17,-60,17,-60],[0,-12,-22,-26,22,-26,-20,-64,20,-64],[0,-3,-11,-20,11,-20,-15,-58,15,-58]][Math.min(t,2)];
-      hy+=ph[0];bY+=ph[1];lkx=m(ph[2]);lky=by+ph[3];rkx=m(ph[4]);rky=by+ph[5];lax=m(ph[6]);lay=by+ph[7];rax=m(ph[8]);ray=by+ph[9]; break;
-    }
-    case 'crouch':{
-      hy+=24;
-      lkx=m(-16);lky=by-14;rkx=m(16);rky=by-14;
-      lax=m(-12);lay=by-40;rax=m(12);ray=by-40; break;
-    }
-    case 'punch':{
-      const ext=[0,28,44][Math.min(t,2)];
-      lkx=m(-7);lky=by-13;rkx=m(7);rky=by-13;
-      lax=m(ext+10);lay=by-64;rax=m(8);ray=by-56; break;
-    }
-    case 'kick':{
-      const ext=[0,24,46][Math.min(t,2)];
-      lkx=m(ext+8);lky=by-30-ext*0.35;rkx=m(-9);rky=by-16;
-      lax=m(-12);lay=by-58;rax=m(10);ray=by-62; break;
-    }
-    case 'block':{
-      lkx=m(-7);lky=by-13;rkx=m(7);rky=by-13;
-      lax=m(5);lay=by-76;rax=m(4);ray=by-66;
-      g.fillStyle(0x88ccff,0.3); g.fillRect(f>0?cx-5:cx-21,by-96,26,68); break;
-    }
-    case 'hurt':{
-      const lean=t===0?7:16; hx=m(lean); bx=m(lean*0.4);
-      lkx=m(-8);lky=by-13;rkx=m(8);rky=by-13;
-      lax=m(-20);lay=by-64;rax=m(10);ray=by-54; break;
-    }
-    case 'ko':{
-      const ko=Math.min(t,2);
-      g.fillStyle(p.pants,1); g.fillRect(cx-30,by-14-ko,60,15);
-      g.fillStyle(p.shirt,1); g.fillRect(cx-24,by-30-ko*.5,48,18);
-      g.fillStyle(p.skin,1);  g.fillCircle(m(26+ko*6),by-26-ko*.5,12);
-      g.fillStyle(p.hair,1);  g.fillEllipse(m(26+ko*6),by-34-ko*.5,26,16);
-      g.fillRect(m(13+ko*6)-13,by-40-ko*.5,26,10);
-      return;
-    }
-  }
-  limb(g,bx,bY-28,rkx,rky,7,5,p.pants);
-  limb(g,bx,bY-62,rax,ray,5,3,p.skin);
-  torso(g,bx,bY-28,bx,bY-70,p.shirt,p.shirtDark);
-  limb(g,bx,bY-28,lkx,lky,8,5,p.pants);
-  limb(g,bx,bY-62,lax,lay,5,4,p.skin);
-  g.fillStyle(p.belt,1); g.fillRect(bx-11,bY-34,22,7);
-  head(g,hx,hy,p.skin,p.hair);
-}
-
-// ─── SCENE: MENU ─────────────────────────────────────────────────────────────
-class MenuScene extends Phaser.Scene {
-  constructor(){ super('Menu'); }
-  create(){
-    // Gradient sky background
-    const bg=this.add.graphics();
-    bg.fillGradientStyle(0x87ceeb,0x87ceeb,0xffe0a0,0xffe0a0,1); bg.fillRect(0,0,W,H*0.62);
-    this._drawTemple(bg);
-    bg.fillGradientStyle(0x7a3c10,0x7a3c10,0xc8682a,0xc8682a,1); bg.fillRect(0,H*0.62,W,H*0.38);
-    bg.fillStyle(0xffffff,0.12); bg.fillRect(0,H*0.62,W,4);
-
-    const title=this.add.text(W/2,120,'STICKMAN POWER',{fontSize:'64px',fontFamily:'Arial Black',color:'#ff4400',stroke:'#1a0000',strokeThickness:10}).setOrigin(0.5);
-    this.add.text(W/2,202,'格斗游戏',{fontSize:'28px',color:'#ffdd00',stroke:'#000',strokeThickness:4}).setOrigin(0.5);
-
-    // Preview fighters drawn with graphics
-    this.gL=this.add.graphics().setDepth(3);
-    this.gR=this.add.graphics().setDepth(3);
-    this.previewT=0;
-
-    const btn=this.add.text(W/2,H-90,'▶  JOUER',{fontSize:'36px',fontFamily:'Arial Black',backgroundColor:'#cc2200',color:'#fff',padding:{x:32,y:14},stroke:'#000',strokeThickness:4}).setOrigin(0.5).setInteractive({useHandCursor:true});
-    btn.on('pointerover',()=>btn.setStyle({backgroundColor:'#ff3300'}));
-    btn.on('pointerout', ()=>btn.setStyle({backgroundColor:'#cc2200'}));
-    btn.on('pointerdown',()=>this.scene.start('Fight'));
-    this.add.text(W/2,H-38,'A/D déplacer  W sauter  S baisser  J coup  K kick  L blocage',{fontSize:'13px',color:'#cccccc'}).setOrigin(0.5);
-
-    this.tweens.add({targets:title,y:'+=6',duration:1400,yoyo:true,repeat:-1,ease:'Sine.easeInOut'});
-    this.input.keyboard.once('keydown-ENTER',()=>this.scene.start('Fight'));
-    this.input.keyboard.once('keydown-SPACE',()=>this.scene.start('Fight'));
-
-    const playBtn=this.add.text(W/2,H-90,'',{}).setInteractive({useHandCursor:true}).setAlpha(0);
-    this.input.on('pointerdown',()=>this.scene.start('Fight'));
-  }
-  _drawTemple(g){
-    [[80,260],[190,220],[310,245],[460,208],[590,235],[720,250],[850,225]].forEach(([mx,mh])=>{
-      g.fillStyle(0x7a5c3a,0.55); g.fillTriangle(mx-90,H*0.62,mx,mh,mx+90,H*0.62);
+    const bar=this.add.graphics();
+    this.load.on('progress', v=>{
+      bar.clear();
+      bar.fillStyle(0x333333,1); bar.fillRoundedRect(W/2-200,H/2+70,400,16,8);
+      bar.fillStyle(0xff4400,1); bar.fillRoundedRect(W/2-200,H/2+70,400*v,16,8);
     });
-    g.fillStyle(0x3d0808,1);
-    g.fillRect(W/2-150,H*0.34,300,H*0.28);
-    g.fillTriangle(W/2-172,H*0.34,W/2,H*0.16,W/2+172,H*0.34);
-    g.fillTriangle(W/2-130,H*0.27,W/2,H*0.12,W/2+130,H*0.27);
-    g.fillStyle(0x5a1010,1);
-    [-96,-40,40,96].forEach(dx=>g.fillRect(W/2+dx-9,H*0.34,18,H*0.28));
-    g.fillStyle(0x1a0000,1); g.fillRect(W/2-22,H*0.49,44,H*0.13);
-    [W/2-190,W/2+190].forEach(lx=>{
-      g.fillStyle(0xff3300,1); g.fillRect(lx-9,H*0.28,18,26);
-      g.fillStyle(0xffaa00,1); g.fillRect(lx-7,H*0.28+2,14,22);
-      g.fillStyle(0xff3300,1); g.fillRect(lx-2,H*0.26,4,6); g.fillRect(lx-2,H*0.28+26,4,6);
-    });
-    // floor lines
-    g.lineStyle(1,0x00000033,0.3);
-    for(let x=0;x<W;x+=64) g.lineBetween(x,H*0.62,x,H);
-    for(let y=H*0.62;y<H;y+=32) g.lineBetween(0,y,W,y);
-  }
-  update(_t,delta){
-    this.previewT+=delta;
-    const frame=Math.floor(this.previewT/150)%4;
-    const p1={skin:0xf5c28a,hair:0x2b1a0a,shirt:0xcc2200,shirtDark:0x881500,pants:0x2244aa,belt:0xddaa00};
-    const p2={skin:0xf5c28a,hair:0x0d0d0d,shirt:0x1155cc,shirtDark:0x0a3080,pants:0x1a1a1a,belt:0xaaaaaa};
-    this.gL.clear(); drawFighter(this.gL, W/2-180, FLOOR, 'idle', frame, p1, 1);
-    this.gR.clear(); drawFighter(this.gR, W/2+180, FLOOR, 'idle', frame, p2, -1);
-  }
-}
 
-// ─── FIGHTER CLASS ────────────────────────────────────────────────────────────
-class Fighter {
-  constructor(scene,x,palette){
-    this.scene=scene; this.x=x; this.y=FLOOR;
-    this.vx=0; this.vy=0; this.onGround=true; this.facing=1;
-    this.hp=100; this.maxHp=100;
-    this.state='idle'; this.stateTimer=0;
-    this.invFrames=0; this.blockFrames=0;
-    this.attackActive=false; this.stunned=0;
-    this.comboCount=0; this.comboTimer=0;
-    this.palette=palette;
-    this.animFrame=0; this.animTimer=0; this.animSpeed=130; this.animLoop=true;
-    this.animList=['idle',4];
-    this.gfx=scene.add.graphics().setDepth(5);
+    this.load.image('ryu','assets/ryu.png');
   }
-  // animList is [stateName, totalFrames]
-  _animFrames(s){
-    return {idle:4,walk:6,jump:3,crouch:2,punch:3,kick:3,block:1,hurt:2,ko:3}[s]||1;
-  }
-  setState(s){
-    if(this.state===s) return;
-    this.state=s; this.stateTimer=0; this.attackActive=false;
-    this.animFrame=0; this.animTimer=0;
-    const speeds={idle:150,walk:90,jump:100,crouch:80,punch:55,kick:62,block:200,hurt:75,ko:130};
-    const loops={idle:true,walk:true};
-    this.animSpeed=speeds[s]||130;
-    this.animLoop=!!loops[s];
-  }
-  hitBox(){ return {x:this.x-26,y:this.y-204,w:52,h:204}; }
-  attackBox(){
-    if(!this.attackActive) return null;
-    const reach=this.state==='kick'?88:66;
-    const ox=this.facing>0?18:-18-reach;
-    return {x:this.x+ox,y:this.y-152,w:reach,h:66};
-  }
-  takeHit(dmg,dir){
-    if(this.invFrames>0||this.state==='ko') return false;
-    const blocked=this.blockFrames>0;
-    if(blocked){ dmg=Math.ceil(dmg*0.12); this.scene.showBlock(this.x,this.y-120); }
-    this.hp=Math.max(0,this.hp-dmg);
-    this.invFrames=22; this.vx=dir*4.5; this.comboCount=0;
-    if(this.hp<=0) this.setState('ko');
-    else { this.setState('hurt'); this.stunned=26; }
-    return true;
-  }
-  update(delta,dt){
-    if(!this.onGround){
-      this.vy+=GRAVITY*dt; this.y+=this.vy*dt;
-      if(this.y>=FLOOR){ this.y=FLOOR; this.vy=0; this.vx=0; this.onGround=true; if(this.state==='jump') this.setState('idle'); }
-    }
-    this.x+=this.vx; this.vx*=0.8;
-    this.x=Phaser.Math.Clamp(this.x,55,W-55);
-    if(this.invFrames>0) this.invFrames--;
-    if(this.stunned>0) this.stunned--;
-    if(this.blockFrames>0) this.blockFrames--;
-    if(this.comboTimer>0) this.comboTimer--; else this.comboCount=0;
-    this.stateTimer++;
-    if(this.state==='hurt'&&this.stunned<=0) this.setState('idle');
-    const atk=this.state==='punch'||this.state==='kick';
-    if(atk){
-      const totalF=this._animFrames(this.state);
-      this.attackActive=(this.animFrame>=1&&this.animFrame<=2);
-      if(this.animFrame>=totalF-1&&this.animTimer>=this.animSpeed-5) this.setState('idle');
-    }
-    // Advance animation
-    this.animTimer+=delta;
-    if(this.animTimer>=this.animSpeed){
-      this.animTimer-=this.animSpeed;
-      const totalF=this._animFrames(this.state);
-      this.animFrame=this.animLoop?(this.animFrame+1)%totalF:Math.min(this.animFrame+1,totalF-1);
-    }
-    // Draw
-    const blink=this.invFrames>0&&Math.floor(this.invFrames/3)%2===0;
-    this.gfx.clear();
-    if(!blink){
-      drawFighter(this.gfx, this.x, this.y, this.state, this.animFrame, this.palette, this.facing);
-    }
-  }
-}
-
-// ─── AI ───────────────────────────────────────────────────────────────────────
-class AI {
-  constructor(f,target){ this.f=f; this.target=target; this.hist=[]; this.plan=null; this.thinkT=0; this.planT=0; }
-  rec(m){ this.hist.push(m); if(this.hist.length>16) this.hist.shift(); }
-  count(m){ return this.hist.slice(-8).filter(x=>x===m).length; }
-  think(dist){
-    const pk=this.count('kick'),pp=this.count('punch'),pj=this.count('jump');
-    if(pk>=3) return 'block_punish';
-    if(pp>=4) return 'backdash_kick';
-    if(pj>=3) return 'wait_kick';
-    if(dist>290) return Math.random()<.65?'advance':'jump_attack';
-    if(dist<65)  return Math.random()<.5?'backdash':'kick';
-    const r=Math.random();
-    if(r<.28) return 'punch'; if(r<.52) return 'kick';
-    if(r<.62) return 'jump_attack'; if(r<.72) return 'block';
-    return 'advance';
-  }
-  update(dt){
-    const f=this.f, p=this.target;
-    if(f.state==='ko'||f.stunned>0) return;
-    if(p.state==='punch') this.rec('punch');
-    if(p.state==='kick')  this.rec('kick');
-    if(!p.onGround)       this.rec('jump');
-    f.facing = f.x < p.x ? 1 : -1;
-    const dist = Math.abs(f.x - p.x);
-
-    // Re-think periodically OR force rethink if stuck (same plan too long)
-    this.thinkT -= dt;
-    this.stuckT = (this.stuckT||0) + dt;
-    if(this.thinkT <= 0 || this.stuckT > 1.5){
-      this.thinkT = 0.12 + Math.random()*0.20;
-      this.stuckT = 0;
-      const next = this.think(dist);
-      if(next !== this.plan){
-        if(next==='block'||next==='block_punish') this.planT = 0.4 + Math.random()*0.3;
-        else this.planT = 0;
-        this.plan = next;
-      }
-    }
-    this.planT -= dt;
-
-    // ── Execute plan ──
-    const pl = this.plan || 'advance';
-
-    // Always walk toward player if in air (can't do much else)
-    if(!f.onGround){ f.x += f.facing*140*dt; return; }
-
-    switch(pl){
-      case 'advance':
-        if(f.state!=='punch'&&f.state!=='kick'){ f.x+=f.facing*185*dt; f.setState('walk'); }
-        break;
-      case 'backdash':
-        f.x -= f.facing*170*dt; f.setState('walk');
-        break;
-      case 'punch':
-        if(dist < 210 && f.state!=='punch'&&f.state!=='kick'){ f.setState('punch'); this.plan='advance'; }
-        else{ f.x += f.facing*185*dt; f.setState('walk'); }
-        break;
-      case 'kick':
-        if(dist < 250 && f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
-        else{ f.x += f.facing*180*dt; f.setState('walk'); }
-        break;
-      case 'jump_attack':
-        f.vy=JUMP_V; f.onGround=false; f.setState('jump'); this.plan='air_chase';
-        break;
-      case 'air_chase':
-        // handled above (in-air movement)
-        break;
-      case 'block':
-      case 'block_punish':
-        f.blockFrames = 14;
-        if(f.state!=='punch'&&f.state!=='kick') f.setState('block');
-        if(this.planT <= 0){
-          // Punish: step in and attack
-          this.plan = 'punch';
-          this.planT = 0;
-        }
-        break;
-      case 'backdash_kick':
-        if(dist < 120){
-          // Already close enough after backdash — kick
-          if(f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
-        } else {
-          f.x -= f.facing*200*dt; f.setState('walk');
-        }
-        break;
-      case 'wait_kick':
-        if(!p.onGround && dist < 220 && f.state!=='kick'){
-          f.setState('kick'); this.plan='advance';
-        } else {
-          // Player is on ground or too far — just advance instead of freezing
-          if(f.state!=='punch'&&f.state!=='kick'){ f.x += f.facing*160*dt; f.setState('walk'); }
-        }
-        break;
-      default:
-        f.x += f.facing*185*dt; f.setState('walk');
-    }
-  }
-}
-
-// ─── FIGHT SCENE ─────────────────────────────────────────────────────────────
-class FightScene extends Phaser.Scene {
-  constructor(){ super('Fight'); }
-
   create(){
-    this.roundActive=false; this.gameState='countdown';
-    this.roundTimer=99; this.timerTick=0;
-    this.roundWins={p1:0,p2:0}; this.round=1;
-    this.shakeX=0; this.shakeY=0;
+    // Register all frames into the texture
+    const tex = this.textures.get('ryu');
+    Object.entries(RYU_FRAMES).forEach(([name,{x,y,w,h}])=>{
+      tex.add(name, 0, x, y, w, h);
+    });
 
-    // ── Background ──
-    this.bgGfx=this.add.graphics().setDepth(0);
-    this._drawBG();
-
-    // Floor line
-    const fl=this.add.graphics().setDepth(1);
-    fl.fillStyle(0xffffff,0.1); fl.fillRect(0,FLOOR-2,W,4);
-    fl.fillStyle(0x000000,0.25); fl.fillRect(0,FLOOR+2,W,6);
-
-    // ── Fighters ──
-    const P1={skin:0xf5c28a,hair:0x2b1a0a,shirt:0xcc2200,shirtDark:0x881500,pants:0x2244aa,belt:0xddaa00};
-    const P2={skin:0xf5c28a,hair:0x0d0d0d,shirt:0x1155cc,shirtDark:0x0a3080,pants:0x1a1a1a,belt:0xaaaaaa};
-    this.p1=new Fighter(this,220,P1); this.p1.facing=1;
-    this.p2=new Fighter(this,W-220,P2); this.p2.facing=-1;
-    this.ai=new AI(this.p2,this.p1);
-
-    // ── Hit sparks ──
-    this.sparkGfx=this.add.graphics().setDepth(15);
-    this.sparks=[];
-
-    // ── HUD ──
-    this._buildHUD();
-
-    // ── Input ──
-    this.keys=this.input.keyboard.addKeys({l:'A',r:'D',u:'W',d:'S',bl:'L',la:'LEFT',ra:'RIGHT',ua:'UP',da:'DOWN'});
-    this._pj=false; this._kj=false;
-    this.input.keyboard.on('keydown-J',()=>this._pj=true);
-    this.input.keyboard.on('keydown-K',()=>this._kj=true);
-    initTouch(()=>this._pj=true, ()=>this._kj=true);
-
-    this._showCountdown();
+    // Build background texture
+    this._buildBG();
+    this.scene.start('Menu');
   }
-
-  _drawBG(){
-    const g=this.bgGfx; g.clear();
+  _buildBG(){
+    const rt=this.add.renderTexture(0,0,W,H);
+    const g=this.add.graphics();
     g.fillGradientStyle(0x87ceeb,0x87ceeb,0xffe0a0,0xffe0a0,1); g.fillRect(0,0,W,H*0.62);
     [[80,260],[190,220],[310,245],[460,208],[590,235],[720,250],[850,225]].forEach(([mx,mh])=>{
       g.fillStyle(0x7a5c3a,0.55); g.fillTriangle(mx-90,H*0.62,mx,mh,mx+90,H*0.62);
@@ -497,6 +171,247 @@ class FightScene extends Phaser.Scene {
     for(let x=0;x<W;x+=64) g.lineBetween(x,H*0.62,x,H);
     for(let y=H*0.62;y<H;y+=32) g.lineBetween(0,y,W,y);
     g.fillStyle(0xffffff,0.12); g.fillRect(0,H*0.62,W,4);
+    rt.draw(g,0,0); g.destroy();
+    this.textures.addRenderTexture('bg',rt,false);
+    this.textures.get('bg').add('__BASE',0,0,0,W,H);
+  }
+}
+
+// ─── SCENE: MENU ─────────────────────────────────────────────────────────────
+class MenuScene extends Phaser.Scene {
+  constructor(){ super('Menu'); }
+  create(){
+    this.add.image(W/2,H/2,'bg').setDisplaySize(W,H);
+    const title=this.add.text(W/2,120,'STICKMAN POWER',{fontSize:'64px',fontFamily:'Arial Black',color:'#ff4400',stroke:'#1a0000',strokeThickness:10}).setOrigin(0.5);
+    this.add.text(W/2,202,'格斗游戏',{fontSize:'28px',color:'#ffdd00',stroke:'#000',strokeThickness:4}).setOrigin(0.5);
+
+    // Preview: P1 facing right, P2 facing left (flipped)
+    const scl = 1.8;
+    this.add.image(W/2-180, FLOOR, 'ryu','idle0').setOrigin(0.5,1).setScale(scl);
+    this.add.image(W/2+180, FLOOR, 'ryu','idle0').setOrigin(0.5,1).setScale(-scl,scl);
+
+    const btn=this.add.text(W/2,H-90,'▶  JOUER',{fontSize:'36px',fontFamily:'Arial Black',backgroundColor:'#cc2200',color:'#fff',padding:{x:32,y:14},stroke:'#000',strokeThickness:4}).setOrigin(0.5).setInteractive({useHandCursor:true});
+    btn.on('pointerover',()=>btn.setStyle({backgroundColor:'#ff3300'}));
+    btn.on('pointerout', ()=>btn.setStyle({backgroundColor:'#cc2200'}));
+    btn.on('pointerdown',()=>this.scene.start('Fight'));
+    this.add.text(W/2,H-38,'A/D déplacer  W sauter  S baisser  J coup  K kick  L blocage',{fontSize:'13px',color:'#cccccc'}).setOrigin(0.5);
+    this.tweens.add({targets:title,y:'+=6',duration:1400,yoyo:true,repeat:-1,ease:'Sine.easeInOut'});
+    this.input.keyboard.once('keydown-ENTER',()=>this.scene.start('Fight'));
+    this.input.keyboard.once('keydown-SPACE',()=>this.scene.start('Fight'));
+  }
+}
+
+// ─── FIGHTER ─────────────────────────────────────────────────────────────────
+class Fighter {
+  constructor(scene, x, isP1){
+    this.scene=scene; this.x=x; this.y=FLOOR;
+    this.vx=0; this.vy=0; this.onGround=true;
+    this.facing = isP1 ? 1 : -1;
+    this.hp=100; this.maxHp=100;
+    this.state='idle'; this.stateTimer=0;
+    this.invFrames=0; this.blockFrames=0;
+    this.attackActive=false; this.stunned=0;
+    this.comboCount=0; this.comboTimer=0;
+    this.animFrame=0; this.animTimer=0; this.animSpeed=130; this.animLoop=true;
+    this.animList=['idle0','idle1','idle2','idle3','idle4'];
+
+    // Scale to fit FLOOR: sprites ~96-128px tall → target ~200px on screen
+    this.scale = 2.0;
+
+    this.sprite = scene.add.image(x, FLOOR, 'ryu', 'idle0')
+      .setOrigin(0.5, 1)
+      .setScale(this.facing < 0 ? -this.scale : this.scale, this.scale)
+      .setDepth(5);
+
+    // Tint P2 slightly blue to differentiate
+    if(!isP1) this.sprite.setTint(0xaaccff);
+  }
+
+  setState(s){
+    if(this.state===s) return;
+    this.state=s; this.stateTimer=0; this.attackActive=false;
+    this.animFrame=0; this.animTimer=0;
+    const A={
+      idle:   {frames:['idle0','idle1','idle2','idle3','idle4'], speed:160, loop:true},
+      walk:   {frames:['walk0','walk1','walk2','walk3','walk4','walk5'], speed:85, loop:true},
+      jump:   {frames:['jump0','jump1','jump2','jump3','jump4','jump5'], speed:90, loop:false},
+      crouch: {frames:['crouch0','crouch1'], speed:80, loop:false},
+      punch:  {frames:['punch0','punch1','punch2'], speed:55, loop:false},
+      kick:   {frames:['kick0','kick1','kick2','kick3','kick4','kick5'], speed:60, loop:false},
+      upper:  {frames:['upper0','upper1','upper2'], speed:70, loop:false},
+      block:  {frames:['block0'], speed:200, loop:true},
+      hurt:   {frames:['hurt0','hurt1'], speed:80, loop:false},
+      ko:     {frames:['ko0','ko1','ko2'], speed:130, loop:false},
+    };
+    const a=A[s]||A.idle;
+    this.animList=a.frames; this.animSpeed=a.speed; this.animLoop=a.loop;
+  }
+
+  hitBox(){ return {x:this.x-28,y:this.y-200,w:56,h:200}; }
+
+  attackBox(){
+    if(!this.attackActive) return null;
+    const reach = this.state==='kick'?100 : this.state==='upper'?70 : 72;
+    const ox = this.facing>0 ? 20 : -20-reach;
+    return {x:this.x+ox, y:this.y-160, w:reach, h:70};
+  }
+
+  takeHit(dmg,dir){
+    if(this.invFrames>0||this.state==='ko') return false;
+    const blocked=this.blockFrames>0;
+    if(blocked){ dmg=Math.ceil(dmg*0.12); this.scene.showBlock(this.x,this.y-130); }
+    this.hp=Math.max(0,this.hp-dmg);
+    this.invFrames=22; this.vx=dir*4.5; this.comboCount=0;
+    if(this.hp<=0) this.setState('ko');
+    else { this.setState('hurt'); this.stunned=26; }
+    return true;
+  }
+
+  _totalFrames(){ return this.animList.length; }
+
+  update(delta,dt){
+    if(!this.onGround){
+      this.vy+=GRAVITY*dt; this.y+=this.vy*dt;
+      if(this.y>=FLOOR){
+        this.y=FLOOR; this.vy=0; this.vx=0; this.onGround=true;
+        if(this.state==='jump') this.setState('idle');
+      }
+    }
+    this.x+=this.vx; this.vx*=0.8;
+    this.x=Phaser.Math.Clamp(this.x,55,W-55);
+    if(this.invFrames>0) this.invFrames--;
+    if(this.stunned>0) this.stunned--;
+    if(this.blockFrames>0) this.blockFrames--;
+    if(this.comboTimer>0) this.comboTimer--; else this.comboCount=0;
+    this.stateTimer++;
+    if(this.state==='hurt'&&this.stunned<=0) this.setState('idle');
+    const atk=this.state==='punch'||this.state==='kick'||this.state==='upper';
+    if(atk){
+      const tf=this._totalFrames();
+      this.attackActive=(this.animFrame>=1&&this.animFrame<=tf-2);
+      if(this.animFrame>=tf-1&&this.animTimer>=this.animSpeed-5) this.setState('idle');
+    }
+    // Advance anim
+    this.animTimer+=delta;
+    if(this.animTimer>=this.animSpeed){
+      this.animTimer-=this.animSpeed;
+      const tf=this._totalFrames();
+      this.animFrame=this.animLoop?(this.animFrame+1)%tf:Math.min(this.animFrame+1,tf-1);
+    }
+    // Update sprite
+    const frameName=this.animList[this.animFrame];
+    const blink=this.invFrames>0&&Math.floor(this.invFrames/3)%2===0;
+    this.sprite.setTexture('ryu',frameName);
+    this.sprite.setScale(this.facing<0 ? -this.scale : this.scale, this.scale);
+    this.sprite.setPosition(this.x, this.y);
+    this.sprite.setAlpha(blink?0.3:1);
+  }
+}
+
+// ─── AI ───────────────────────────────────────────────────────────────────────
+class AI {
+  constructor(f,target){ this.f=f; this.target=target; this.hist=[]; this.plan=null; this.thinkT=0; this.planT=0; this.stuckT=0; }
+  rec(m){ this.hist.push(m); if(this.hist.length>16) this.hist.shift(); }
+  count(m){ return this.hist.slice(-8).filter(x=>x===m).length; }
+  think(dist){
+    const pk=this.count('kick'),pp=this.count('punch'),pj=this.count('jump');
+    if(pk>=3) return 'block_punish';
+    if(pp>=4) return 'backdash_kick';
+    if(pj>=3) return 'wait_kick';
+    if(dist>290) return Math.random()<.65?'advance':'jump_attack';
+    if(dist<65)  return Math.random()<.5?'backdash':'kick';
+    const r=Math.random();
+    if(r<.25) return 'punch'; if(r<.48) return 'kick';
+    if(r<.58) return 'jump_attack'; if(r<.68) return 'block';
+    return 'advance';
+  }
+  update(dt){
+    const f=this.f,p=this.target;
+    if(f.state==='ko'||f.stunned>0) return;
+    if(p.state==='punch') this.rec('punch');
+    if(p.state==='kick')  this.rec('kick');
+    if(!p.onGround)       this.rec('jump');
+    f.facing=f.x<p.x?1:-1;
+    const dist=Math.abs(f.x-p.x);
+    this.thinkT-=dt; this.stuckT+=dt;
+    if(this.thinkT<=0||this.stuckT>1.5){
+      this.thinkT=0.12+Math.random()*0.20; this.stuckT=0;
+      const next=this.think(dist);
+      if(next!==this.plan){
+        if(next==='block'||next==='block_punish') this.planT=0.4+Math.random()*0.3;
+        else this.planT=0;
+        this.plan=next;
+      }
+    }
+    this.planT-=dt;
+    if(!f.onGround){ f.x+=f.facing*140*dt; return; }
+    switch(this.plan||'advance'){
+      case 'advance':
+        if(f.state!=='punch'&&f.state!=='kick'&&f.state!=='upper'){ f.x+=f.facing*185*dt; f.setState('walk'); }
+        break;
+      case 'backdash':
+        f.x-=f.facing*170*dt; f.setState('walk'); break;
+      case 'punch':
+        if(dist<215&&f.state!=='punch'&&f.state!=='kick'&&f.state!=='upper'){ f.setState('punch'); this.plan='advance'; }
+        else{ f.x+=f.facing*185*dt; f.setState('walk'); }
+        break;
+      case 'kick':
+        if(dist<260&&f.state!=='kick'&&f.state!=='punch'&&f.state!=='upper'){ f.setState('kick'); this.plan='advance'; }
+        else{ f.x+=f.facing*180*dt; f.setState('walk'); }
+        break;
+      case 'jump_attack':
+        f.vy=JUMP_V; f.onGround=false; f.setState('jump'); this.plan='air_chase'; break;
+      case 'air_chase': break; // handled by onGround check above
+      case 'block':
+      case 'block_punish':
+        f.blockFrames=14;
+        if(f.state!=='punch'&&f.state!=='kick'&&f.state!=='upper') f.setState('block');
+        if(this.planT<=0){ this.plan='punch'; }
+        break;
+      case 'backdash_kick':
+        if(dist<120&&f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
+        else{ f.x-=f.facing*200*dt; f.setState('walk'); }
+        break;
+      case 'wait_kick':
+        if(!p.onGround&&dist<220&&f.state!=='kick'){ f.setState('kick'); this.plan='advance'; }
+        else if(f.state!=='punch'&&f.state!=='kick'){ f.x+=f.facing*160*dt; f.setState('walk'); }
+        break;
+      default:
+        f.x+=f.facing*185*dt; f.setState('walk');
+    }
+  }
+}
+
+// ─── FIGHT SCENE ─────────────────────────────────────────────────────────────
+class FightScene extends Phaser.Scene {
+  constructor(){ super('Fight'); }
+  create(){
+    this.roundActive=false; this.gameState='countdown';
+    this.roundTimer=99; this.timerTick=0;
+    this.roundWins={p1:0,p2:0}; this.round=1;
+
+    this.add.image(W/2,H/2,'bg').setDisplaySize(W,H).setDepth(0);
+    const fl=this.add.graphics().setDepth(1);
+    fl.fillStyle(0xffffff,0.1); fl.fillRect(0,FLOOR-2,W,4);
+    fl.fillStyle(0x000000,0.25); fl.fillRect(0,FLOOR+2,W,6);
+
+    this.p1=new Fighter(this,220,true);
+    this.p2=new Fighter(this,W-220,false);
+    this.ai=new AI(this.p2,this.p1);
+
+    this.sparkGfx=this.add.graphics().setDepth(15);
+    this.sparks=[];
+
+    this._buildHUD();
+
+    this.keys=this.input.keyboard.addKeys({l:'A',r:'D',u:'W',d:'S',bl:'L',la:'LEFT',ra:'RIGHT',ua:'UP',da:'DOWN'});
+    this._pj=false; this._kj=false; this._uj=false;
+    this.input.keyboard.on('keydown-J',()=>this._pj=true);
+    this.input.keyboard.on('keydown-K',()=>this._kj=true);
+    this.input.keyboard.on('keydown-U',()=>this._uj=true); // uppercut
+    initTouch(()=>this._pj=true, ()=>this._kj=true);
+
+    this._showCountdown();
   }
 
   _buildHUD(){
@@ -505,8 +420,8 @@ class FightScene extends Phaser.Scene {
     this.hpBar1=this.add.graphics().setDepth(d+1);
     this.add.graphics().setDepth(d).fillStyle(0x111111,.9).fillRoundedRect(W-340,14,322,28,6);
     this.hpBar2=this.add.graphics().setDepth(d+1);
-    this.add.text(22,48,'P1 - KEN',{fontSize:'14px',fontFamily:'Arial Black',color:'#ff7755',stroke:'#000',strokeThickness:3}).setDepth(d+2);
-    this.add.text(W-22,48,'P2 - RYU',{fontSize:'14px',fontFamily:'Arial Black',color:'#5599ff',stroke:'#000',strokeThickness:3}).setOrigin(1,0).setDepth(d+2);
+    this.add.text(22,48,'P1 - RYU',{fontSize:'14px',fontFamily:'Arial Black',color:'#ff7755',stroke:'#000',strokeThickness:3}).setDepth(d+2);
+    this.add.text(W-22,48,'P2 - RYU',{fontSize:'14px',fontFamily:'Arial Black',color:'#aaccff',stroke:'#000',strokeThickness:3}).setOrigin(1,0).setDepth(d+2);
     this.timerTxt=this.add.text(W/2,10,'99',{fontSize:'46px',fontFamily:'Arial Black',color:'#ffdd00',stroke:'#000',strokeThickness:6}).setOrigin(.5,0).setDepth(d+2);
     this.dots1=[this.add.graphics().setDepth(d+2),this.add.graphics().setDepth(d+2)];
     this.dots2=[this.add.graphics().setDepth(d+2),this.add.graphics().setDepth(d+2)];
@@ -516,9 +431,8 @@ class FightScene extends Phaser.Scene {
   }
 
   _updateHUD(){
-    const p1p=this.p1.hp/this.p1.maxHp, p2p=this.p2.hp/this.p2.maxHp;
-    const bw=318,bh=24;
-    const col=p=>p>.5?0x22cc44:p>.25?0xffcc00:0xff2200;
+    const p1p=this.p1.hp/100, p2p=this.p2.hp/100;
+    const bw=318,bh=24, col=p=>p>.5?0x22cc44:p>.25?0xffcc00:0xff2200;
     this.hpBar1.clear();
     if(p1p>0){ this.hpBar1.fillStyle(col(p1p),1).fillRoundedRect(20,16,bw*p1p,bh,4); this.hpBar1.fillStyle(0xffffff,.18).fillRoundedRect(20,16,bw*p1p,bh*.45,4); }
     this.hpBar2.clear();
@@ -537,7 +451,7 @@ class FightScene extends Phaser.Scene {
       this.tweens.add({targets:this.centerMsg,alpha:0,scaleX:.85,scaleY:.85,duration:750,ease:'Power2'});
       i++;
       if(i<msgs.length) this.time.delayedCall(850,show);
-      else this.time.delayedCall(250,()=>{ this.roundActive=true; this.gameState='fighting'; });
+      else this.time.delayedCall(250,()=>{this.roundActive=true;this.gameState='fighting';});
     };
     show();
   }
@@ -546,8 +460,8 @@ class FightScene extends Phaser.Scene {
     this.roundActive=false; this.gameState='roundover';
     let msg='';
     if(winner==='draw') msg='EGALITE!';
-    else if(winner==='p1'){ msg='KEN GAGNE!'; this.roundWins.p1++; }
-    else{ msg='RYU GAGNE!'; this.roundWins.p2++; }
+    else if(winner==='p1'){ msg='P1 GAGNE!'; this.roundWins.p1++; }
+    else{ msg='P2 GAGNE!'; this.roundWins.p2++; }
     this.centerMsg.setText(msg).setAlpha(0).setScale(2);
     this.tweens.add({targets:this.centerMsg,alpha:1,scaleX:1,scaleY:1,duration:450,ease:'Back.easeOut'});
     this._updateHUD();
@@ -560,13 +474,12 @@ class FightScene extends Phaser.Scene {
   _resetRound(){
     this.p1.hp=100; this.p1.x=220; this.p1.y=FLOOR; this.p1.vx=0; this.p1.vy=0; this.p1.onGround=true; this.p1.setState('idle');
     this.p2.hp=100; this.p2.x=W-220; this.p2.y=FLOOR; this.p2.vx=0; this.p2.vy=0; this.p2.onGround=true; this.p2.setState('idle');
-    this.roundTimer=99; this.timerTick=0;
-    this.gameState='countdown'; this._showCountdown();
+    this.roundTimer=99; this.timerTick=0; this.gameState='countdown'; this._showCountdown();
   }
 
   _gameOver(){
     this.gameState='gameover';
-    const w=this.roundWins.p1>this.roundWins.p2?'KEN':'RYU';
+    const w=this.roundWins.p1>this.roundWins.p2?'P1':'P2';
     this.add.graphics().setDepth(28).fillStyle(0x000000,.72).fillRect(0,0,W,H);
     this.add.text(W/2,H/2-70,w+' GAGNE!',{fontSize:'88px',fontFamily:'Arial Black',color:'#ffdd00',stroke:'#000',strokeThickness:12}).setOrigin(.5).setDepth(30);
     const rb=this.add.text(W/2,H/2+60,'REJOUER  [ENTREE]',{fontSize:'30px',fontFamily:'Arial Black',backgroundColor:'#cc2200',color:'#fff',padding:{x:22,y:12},stroke:'#000',strokeThickness:3}).setOrigin(.5).setDepth(30).setInteractive({useHandCursor:true});
@@ -574,31 +487,20 @@ class FightScene extends Phaser.Scene {
     this.input.keyboard.once('keydown-ENTER',()=>this.scene.restart());
   }
 
-  _spawnSpark(x,y){
-    this.sparks.push({x,y,life:18,maxLife:18,r:12+Math.random()*8});
-  }
-
-  showBlock(x,y){
-    this.sparks.push({x,y,life:10,maxLife:10,r:22,block:true});
-  }
+  _spawnSpark(x,y){ this.sparks.push({x,y,life:18,maxLife:18,r:14+Math.random()*8}); }
+  showBlock(x,y){ this.sparks.push({x,y,life:10,maxLife:10,r:24,block:true}); }
 
   _drawSparks(){
     const g=this.sparkGfx; g.clear();
     this.sparks=this.sparks.filter(s=>s.life>0);
     this.sparks.forEach(s=>{
       const pct=s.life/s.maxLife;
-      if(s.block){
-        g.fillStyle(0x88ccff,pct*.7); g.fillCircle(s.x,s.y,s.r*pct+8);
-      } else {
+      if(s.block){ g.fillStyle(0x88ccff,pct*.7); g.fillCircle(s.x,s.y,s.r*pct+8); }
+      else{
         g.fillStyle(0xffff00,pct); g.fillCircle(s.x,s.y,s.r*pct);
         g.fillStyle(0xff8800,pct); g.fillCircle(s.x,s.y,s.r*pct*.55);
         g.fillStyle(0xffffff,pct); g.fillCircle(s.x,s.y,4*pct);
-        for(let i=0;i<8;i++){
-          const a=i/8*Math.PI*2+(1-pct)*2;
-          const d=s.r*(1-pct)*1.6;
-          g.fillStyle(0xffdd00,pct*.8);
-          g.fillRect(s.x+Math.cos(a)*d-1.5,s.y+Math.sin(a)*d-1.5,3,3);
-        }
+        for(let i=0;i<8;i++){const a=i/8*Math.PI*2+(1-pct)*2,d=s.r*(1-pct)*1.6;g.fillStyle(0xffdd00,pct*.8);g.fillRect(s.x+Math.cos(a)*d-1.5,s.y+Math.sin(a)*d-1.5,3,3);}
       }
       s.life--;
     });
@@ -609,10 +511,10 @@ class FightScene extends Phaser.Scene {
       const ab=a.attackBox(); if(!ab) return;
       const hb=d.hitBox();
       if(ab.x<hb.x+hb.w&&ab.x+ab.w>hb.x&&ab.y<hb.y+hb.h&&ab.y+ab.h>hb.y){
-        const dmg=a.state==='kick'?13:10;
+        const dmg=a.state==='kick'?13:a.state==='upper'?18:10;
         if(d.takeHit(dmg,a.facing)){
-          this._spawnSpark(d.x+d.facing*22,d.y-130);
-          this.cameras.main.shake(120,0.008);
+          this._spawnSpark(d.x+d.facing*22,d.y-140);
+          this.cameras.main.shake(110,0.008);
           a.attackActive=false;
         }
       }
@@ -621,39 +523,35 @@ class FightScene extends Phaser.Scene {
 
   _handleInput(dt){
     const p=this.p1;
-    if(p.state==='ko'||p.stunned>0){ this._pj=false; this._kj=false; return; }
+    if(p.state==='ko'||p.stunned>0){ this._pj=false;this._kj=false;this._uj=false; return; }
     const k=this.keys;
-    if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='hurt') p.facing=p.x<this.p2.x?1:-1;
+    if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper'&&p.state!=='hurt') p.facing=p.x<this.p2.x?1:-1;
 
     const blocking=k.bl.isDown||touch.block;
-    if(blocking){
-      p.blockFrames=10;
-      if(p.onGround&&p.state!=='punch'&&p.state!=='kick') p.setState('block');
-    } else {
-      // Release block immediately when key not held
-      if(p.state==='block') p.setState('idle');
-    }
+    if(blocking){ p.blockFrames=10; if(p.onGround&&p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper') p.setState('block'); }
+    else if(p.state==='block') p.setState('idle');
 
     if(this._pj){
-      if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='hurt'&&p.state!=='block'){
+      if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper'&&p.state!=='hurt'&&p.state!=='block'){
         p.setState('punch'); p.comboCount++; p.comboTimer=50;
         if(p.comboCount>=3) this._showCombo(p.comboCount);
       }
       this._pj=false;
     }
     if(this._kj){
-      if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='hurt'&&p.state!=='block') p.setState('kick');
+      if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper'&&p.state!=='hurt'&&p.state!=='block') p.setState('kick');
       this._kj=false;
     }
-
-    if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='hurt'&&p.state!=='block'){
+    if(this._uj){
+      if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper'&&p.state!=='hurt'&&p.state!=='block') p.setState('upper');
+      this._uj=false;
+    }
+    if(p.state!=='punch'&&p.state!=='kick'&&p.state!=='upper'&&p.state!=='hurt'&&p.state!=='block'){
       const ml=k.l.isDown||k.la.isDown||touch.left;
       const mr=k.r.isDown||k.ra.isDown||touch.right;
-      // Horizontal movement (works in air too)
       if(ml){ p.x-=202*dt; if(p.onGround){ p.setState('walk'); p.facing=-1; } else p.facing=-1; }
       else if(mr){ p.x+=202*dt; if(p.onGround){ p.setState('walk'); p.facing=1; } else p.facing=1; }
       else if(p.state==='walk') p.setState('idle');
-      // Jump (independent of horizontal movement)
       if((k.u.isDown||k.ua.isDown||touch.up)&&p.onGround){ p.vy=JUMP_V; p.onGround=false; p.setState('jump'); }
       if((k.d.isDown||k.da.isDown||touch.down)&&p.onGround) p.setState('crouch');
     }
@@ -668,18 +566,14 @@ class FightScene extends Phaser.Scene {
   update(time,delta){
     const dt=delta/1000;
     if(this.gameState!=='fighting'){
-      this.p1.update(delta,dt); this.p2.update(delta,dt);
-      this._drawSparks(); return;
+      this.p1.update(delta,dt); this.p2.update(delta,dt); this._drawSparks(); return;
     }
     this.timerTick+=delta;
     if(this.timerTick>=1000){ this.timerTick-=1000; this.roundTimer=Math.max(0,this.roundTimer-1); }
     this._handleInput(dt);
     this.ai.update(dt);
-    this.p1.update(delta,dt);
-    this.p2.update(delta,dt);
-    this._checkHits();
-    this._drawSparks();
-    this._updateHUD();
+    this.p1.update(delta,dt); this.p2.update(delta,dt);
+    this._checkHits(); this._drawSparks(); this._updateHUD();
     if(this.p1.hp<=0&&this.p2.hp<=0) this._showRoundResult('draw');
     else if(this.p1.hp<=0) this._showRoundResult('p2');
     else if(this.p2.hp<=0) this._showRoundResult('p1');
@@ -687,15 +581,12 @@ class FightScene extends Phaser.Scene {
   }
 }
 
-// ─── BOOT ─────────────────────────────────────────────────────────────────────
 new Phaser.Game({
-  type: Phaser.AUTO,
-  width: W, height: H,
-  parent: 'game-container',
-  backgroundColor: '#1a0a00',
-  scene: [MenuScene, FightScene],
-  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-  audio: { noAudio: true },
+  type:Phaser.AUTO, width:W, height:H,
+  parent:'game-container', backgroundColor:'#1a0a00',
+  scene:[PreloadScene, MenuScene, FightScene],
+  scale:{mode:Phaser.Scale.FIT, autoCenter:Phaser.Scale.CENTER_BOTH},
+  audio:{noAudio:true},
 });
 </script>
 </body>
