@@ -390,7 +390,7 @@ class Fight extends Phaser.Scene{
   }
   roundResult(w){
     if(this.gameState==='over')return;
-    this.roundActive=false;this.gameState='over';let msg;
+    this.roundActive=false;this.gameState='over';this.hitstop=0;let msg;
     if(w==='draw')msg='EGALITE';else if(w==='p1'){msg='VOUS GAGNEZ';this.wins.p1++;}else{msg='K.O.';this.wins.p2++;}
     const loser=w==='p1'?this.p2:w==='p2'?this.p1:null;
     if(loser)this.fx.ko(loser.x,FLOOR);
@@ -408,12 +408,16 @@ class Fight extends Phaser.Scene{
     this.timer=99;this.tt=0;this.gameState='count';this.countdown();
   }
   gameOver(){
-    this.gameState='gameover';const win=this.wins.p1>this.wins.p2;
+    this.gameState='gameover';this.hitstop=0;const win=this.wins.p1>this.wins.p2;
     this.add.graphics().setDepth(28).fillStyle(0x000000,.72).fillRect(0,0,W,H);
     this.add.text(W/2,H/2-60,win?'VICTOIRE':'DEFAITE',{fontSize:'82px',fontFamily:'Arial Black',color:win?'#ffdd00':'#ff4444',stroke:'#000',strokeThickness:12}).setOrigin(.5).setDepth(30);
-    const b=this.add.text(W/2,H/2+60,'REJOUER',{fontSize:'30px',fontFamily:'Arial Black',backgroundColor:'#cc2200',color:'#fff',padding:{x:24,y:12},stroke:'#000',strokeThickness:3}).setOrigin(.5).setDepth(30).setInteractive({useHandCursor:true});
-    b.on('pointerdown',()=>this.scene.restart());
-    this.input.keyboard.once('keydown-ENTER',()=>this.scene.restart());
+    this.add.text(W/2,H/2+30,'Touche / écran pour rejouer',{fontSize:'18px',color:'#ffffff'}).setOrigin(.5).setDepth(30);
+    const b=this.add.text(W/2,H/2+78,'REJOUER',{fontSize:'30px',fontFamily:'Arial Black',backgroundColor:'#cc2200',color:'#fff',padding:{x:24,y:12},stroke:'#000',strokeThickness:3}).setOrigin(.5).setDepth(30).setInteractive({useHandCursor:true});
+    let done=false;const restart=()=>{if(done)return;done=true;this.scene.restart();};
+    b.on('pointerdown',restart);
+    // allow restart from anywhere: any key or a tap on the game canvas
+    this.input.keyboard.once('keydown',restart);
+    this.input.once('pointerdown',restart);
   }
   checkHits(){
     [[this.p1,this.p2],[this.p2,this.p1]].forEach(([a,d])=>{
