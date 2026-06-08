@@ -64,7 +64,7 @@ A('kick0',55,2861,61,94);A('kick1',157,2861,94,94);A('kick2',259,2861,120,94);A(
 A('hikick0',59,3172,54,122);A('hikick1',169,3172,49,122);A('hikick2',235,3172,93,122);
 A('sweep0',41,3301,97,59);A('sweep1',170,3301,146,59);
 A('hadou0',6,4592,62,93);A('hadou1',103,4592,68,93);A('hadou2',202,4592,72,93);A('hadou3',295,4592,81,93);
-A('fire0',1,4881,85,96);
+A('fb0',3,5608,49,28);A('fb1',67,5608,55,28);A('fb2',131,5608,56,28);A('fb3',196,5608,57,28);A('fb4',261,5608,51,28);A('fb5',327,5608,54,28);
 A('hurt0',4,5290,60,122);A('hurt1',69,5290,60,122);A('hurt2',132,5290,55,122);
 A('ko0',27,4992,82,80);A('ko1',154,4992,102,80);A('ko2',300,4992,78,80);A('ko3',393,4992,120,80);
 return F;})();
@@ -123,7 +123,7 @@ class Preload extends Phaser.Scene{
     this.add.text(W/2,H/2-30,'STICKMAN POWER',{fontSize:'52px',fontFamily:'Arial Black',color:'#ff4400',stroke:'#000',strokeThickness:8}).setOrigin(.5);
     const bar=this.add.graphics();
     this.load.on('progress',v=>{bar.clear();bar.fillStyle(0x333,1).fillRoundedRect(W/2-200,H/2+40,400,16,8);bar.fillStyle(0xff5500,1).fillRoundedRect(W/2-200,H/2+40,400*v,16,8);});
-    this.load.image('ryu','assets/ryu.png');
+    this.load.image({key:'ryu',url:'assets/ryu.png',normalMap:false});
   }
   create(){
     const tex=this.textures.get('ryu');
@@ -265,13 +265,15 @@ class Fireball{
   constructor(sc,x,y,dir,owner){
     this.sc=sc;this.dir=dir;this.owner=owner;this.dead=false;this.t=0;
     this.glow=sc.add.graphics().setDepth(7);
-    this.sp=sc.add.image(x,y,'ryu','fire0').setOrigin(.5).setDepth(8).setScale(dir<0?-1.6:1.6,1.6);
-    this.sp.setTint(owner.p1?0x66ddff:0xffaa44);
+    this.frame=0;this.ft=0;
+    this.sp=sc.add.image(x,y,'ryu','fb0').setOrigin(.5).setDepth(8).setScale(dir<0?-2.2:2.2,2.2);
+    if(!owner.p1)this.sp.setTint(0xffbb44);
   }
   update(d,dt){
-    this.t+=d;this.sp.x+=this.dir*460*dt;
-    this.sp.setScale((this.dir<0?-1.6:1.6),1.6+Math.sin(this.t/60)*0.12);
-    this.glow.clear();this.glow.fillStyle(this.owner.p1?0x66ddff:0xffaa44,.25);this.glow.fillCircle(this.sp.x,this.sp.y,38+Math.sin(this.t/40)*4);
+    this.t+=d;this.ft+=d;this.sp.x+=this.dir*460*dt;
+    if(this.ft>=70){this.ft-=70;this.frame=(this.frame+1)%6;this.sp.setTexture('ryu','fb'+this.frame);}
+    this.sp.setScale((this.dir<0?-2.2:2.2),2.2);
+    this.glow.clear();this.glow.fillStyle(this.owner.p1?0x66ddff:0xffaa44,.3);this.glow.fillCircle(this.sp.x,this.sp.y,36+Math.sin(this.t/40)*4);
     if(this.sp.x<-40||this.sp.x>W+40)this.kill();
   }
   box(){return{x:this.sp.x-30,y:this.sp.y-28,w:60,h:56};}
@@ -487,7 +489,7 @@ new Phaser.Game({
   type:Phaser.AUTO,width:W,height:H,parent:'game-container',backgroundColor:'#000',
   scene:[Preload,Menu,Fight],
   scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},
-  render:{antialias:true},
+  render:{antialias:true,premultipliedAlpha:false},
   audio:{noAudio:true},
 });
 initTouch();
