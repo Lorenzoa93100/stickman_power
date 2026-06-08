@@ -357,13 +357,14 @@ class AI {
     f.facing = f.x < p.x ? 1 : -1;
     const dist = Math.abs(f.x - p.x);
 
-    // Re-think periodically
+    // Re-think periodically OR force rethink if stuck (same plan too long)
     this.thinkT -= dt;
-    if(this.thinkT <= 0){
+    this.stuckT = (this.stuckT||0) + dt;
+    if(this.thinkT <= 0 || this.stuckT > 1.5){
       this.thinkT = 0.12 + Math.random()*0.20;
+      this.stuckT = 0;
       const next = this.think(dist);
       if(next !== this.plan){
-        // Starting a block plan: give it a fresh countdown
         if(next==='block'||next==='block_punish') this.planT = 0.4 + Math.random()*0.3;
         else this.planT = 0;
         this.plan = next;
@@ -409,15 +410,22 @@ class AI {
         }
         break;
       case 'backdash_kick':
-        f.x -= f.facing*200*dt; f.setState('walk');
-        if(dist > 160 && this.planT <= 0) this.plan='kick';
+        if(dist < 120){
+          // Already close enough after backdash — kick
+          if(f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
+        } else {
+          f.x -= f.facing*200*dt; f.setState('walk');
+        }
         break;
       case 'wait_kick':
-        // Stand and wait — handled by opponent air check below
-        if(!p.onGround && dist < 220 && f.state!=='kick'){ f.setState('kick'); this.plan='advance'; }
+        if(!p.onGround && dist < 220 && f.state!=='kick'){
+          f.setState('kick'); this.plan='advance';
+        } else {
+          // Player is on ground or too far — just advance instead of freezing
+          if(f.state!=='punch'&&f.state!=='kick'){ f.x += f.facing*160*dt; f.setState('walk'); }
+        }
         break;
       default:
-        // Fallback: always advance
         f.x += f.facing*185*dt; f.setState('walk');
     }
   }
