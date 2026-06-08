@@ -349,47 +349,77 @@ class AI {
     return 'advance';
   }
   update(dt){
-    const f=this.f,p=this.target;
+    const f=this.f, p=this.target;
     if(f.state==='ko'||f.stunned>0) return;
     if(p.state==='punch') this.rec('punch');
     if(p.state==='kick')  this.rec('kick');
     if(!p.onGround)       this.rec('jump');
-    f.facing=f.x<p.x?1:-1;
-    const dist=Math.abs(f.x-p.x);
-    this.thinkT-=dt;
-    if(this.thinkT<=0){
-      this.thinkT=0.14+Math.random()*0.22;
-      const newPlan=this.think(dist);
-      // When switching to a timed block plan, always reset planT positively
-      if((newPlan==='block'||newPlan==='block_punish')&&newPlan!==this.plan) this.planT=0.35+Math.random()*0.3;
-      this.plan=newPlan;
+    f.facing = f.x < p.x ? 1 : -1;
+    const dist = Math.abs(f.x - p.x);
+
+    // Re-think periodically
+    this.thinkT -= dt;
+    if(this.thinkT <= 0){
+      this.thinkT = 0.12 + Math.random()*0.20;
+      const next = this.think(dist);
+      if(next !== this.plan){
+        // Starting a block plan: give it a fresh countdown
+        if(next==='block'||next==='block_punish') this.planT = 0.4 + Math.random()*0.3;
+        else this.planT = 0;
+        this.plan = next;
+      }
     }
-    this.planT-=dt;
-    const pl=this.plan;
-    if(pl==='advance'&&f.onGround&&f.state!=='punch'&&f.state!=='kick'){ f.x+=f.facing*185*dt; f.setState('walk'); }
-    else if(pl==='backdash'&&f.onGround){ f.x-=f.facing*165*dt; f.setState('walk'); }
-    else if(pl==='punch'){
-      if(dist<205&&f.state!=='punch'&&f.state!=='kick'){ f.setState('punch'); this.plan='advance'; }
-      else{ f.x+=f.facing*180*dt; f.setState('walk'); }
+    this.planT -= dt;
+
+    // ── Execute plan ──
+    const pl = this.plan || 'advance';
+
+    // Always walk toward player if in air (can't do much else)
+    if(!f.onGround){ f.x += f.facing*140*dt; return; }
+
+    switch(pl){
+      case 'advance':
+        if(f.state!=='punch'&&f.state!=='kick'){ f.x+=f.facing*185*dt; f.setState('walk'); }
+        break;
+      case 'backdash':
+        f.x -= f.facing*170*dt; f.setState('walk');
+        break;
+      case 'punch':
+        if(dist < 210 && f.state!=='punch'&&f.state!=='kick'){ f.setState('punch'); this.plan='advance'; }
+        else{ f.x += f.facing*185*dt; f.setState('walk'); }
+        break;
+      case 'kick':
+        if(dist < 250 && f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
+        else{ f.x += f.facing*180*dt; f.setState('walk'); }
+        break;
+      case 'jump_attack':
+        f.vy=JUMP_V; f.onGround=false; f.setState('jump'); this.plan='air_chase';
+        break;
+      case 'air_chase':
+        // handled above (in-air movement)
+        break;
+      case 'block':
+      case 'block_punish':
+        f.blockFrames = 14;
+        if(f.state!=='punch'&&f.state!=='kick') f.setState('block');
+        if(this.planT <= 0){
+          // Punish: step in and attack
+          this.plan = 'punch';
+          this.planT = 0;
+        }
+        break;
+      case 'backdash_kick':
+        f.x -= f.facing*200*dt; f.setState('walk');
+        if(dist > 160 && this.planT <= 0) this.plan='kick';
+        break;
+      case 'wait_kick':
+        // Stand and wait — handled by opponent air check below
+        if(!p.onGround && dist < 220 && f.state!=='kick'){ f.setState('kick'); this.plan='advance'; }
+        break;
+      default:
+        // Fallback: always advance
+        f.x += f.facing*185*dt; f.setState('walk');
     }
-    else if(pl==='kick'){
-      if(dist<240&&f.state!=='kick'&&f.state!=='punch'){ f.setState('kick'); this.plan='advance'; }
-      else{ f.x+=f.facing*175*dt; f.setState('walk'); }
-    }
-    else if(pl==='jump_attack'&&f.onGround&&f.state!=='punch'&&f.state!=='kick'){ f.vy=JUMP_V; f.onGround=false; f.setState('jump'); this.plan='air_chase'; }
-    else if(pl==='air_chase'){ if(!f.onGround){ f.x+=f.facing*150*dt; if(dist<170) f.setState('kick'); } else this.plan='advance'; }
-    else if(pl==='block'){
-      f.blockFrames=14;
-      if(f.state!=='punch'&&f.state!=='kick') f.setState('block');
-      if(this.planT<=0){ this.plan=Math.random()<.6?'punch':'kick'; }
-    }
-    else if(pl==='block_punish'){
-      f.blockFrames=14;
-      if(f.state!=='punch'&&f.state!=='kick') f.setState('block');
-      if(this.planT<=0){ this.plan='punch'; }
-    }
-    else if(pl==='backdash_kick'){ if(f.onGround){ f.x-=f.facing*200*dt; f.setState('walk'); if(dist>170&&this.planT<=0) this.plan='kick'; } }
-    else if(pl==='wait_kick'){ if(!p.onGround&&dist<220&&f.state!=='kick'){ f.setState('kick'); this.plan='advance'; } }
   }
 }
 
